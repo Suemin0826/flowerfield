@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suemin's Love Garden 🌸</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
+
+    body {
+      background-color: #fdf5e6; /* creamy beige */
+      font-family: 'Cute Font', cursive;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin: 1.5em 0 0.5em;
+      color: #de8aa1;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .garden {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .flower {
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .flower:hover {
+      transform: scale(1.1);
+    }
+
+    .popup {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #fff7fb;
+      border: 1px solid #ffccdd;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.9em;
+      color: #d46f94;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
+      white-space: nowrap;
+    }
+
+    .capsule {
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #ffeef4;
+      border: 2px dashed #f8a3b7;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .capsule button {
+      background-color: #f8a3b7;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .capsule button:hover {
+      background-color: #e88da6;
+    }
+
+    .hidden-message {
+      margin-top: 15px;
+      color: #de8aa1;
+      font-size: 1.1em;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌸 Suemin's Love Garden 🌸</h1>
+  <p>One flower each day, blooming just for you 💌</p>
+
+  <div class="garden">
+    <!-- 🌷 Flower images go here -->
+    <div class="flower" onclick="showPopup(this, 'I believe in you 💖')">
+      <img src="flower1.png" alt="Flower 1" width="100" />
+      <div class="popup">Meaning</div>
+    </div>
+
+    <div class="flower" onclick="showPopup(this, 'My heart grows only for you 🌿')">
+      <img src="flower2.png" alt="Flower 2" width="100" />
+      <div class="popup">Meaning</div>
+    </div>
+
+    <div class="flower" onclick="showPopup(this, 'You are my safe place 🌙')">
+      <img src="flower3.png" alt="Flower 3" width="100" />
+      <div class="popup">Meaning</div>
+    </div>
+
+    <!-- 🌼 Add more flowers like this if needed -->
+    <!-- 
+    <div class="flower" onclick="showPopup(this, 'Your flower meaning here')">
+      <img src="your-flower.png" alt="Flower X" width="100" />
+      <div class="popup">Meaning</div>
+    </div>
+    -->
+  </div>
+
+  <!-- 💌 Love Capsule Section -->
+  <div class="capsule">
+    <h2>💌 Open the Love Capsule</h2>
+    <p>Made for a very special day!</p>
+    <button onclick="openCapsule()">Open Capsule</button>
+    <div id="capsuleMessage" class="hidden-message">🌷 December 13 — Happy Birthday, my love. I'm so proud of you and always with you 💗</div>
+  </div>
+
+  <script>
+    function showPopup(flowerEl, message) {
+      const popup = flowerEl.querySelector('.popup');
+      popup.textContent = message;
+      popup.style.display = 'block';
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 3000);
+    }
+
+    function openCapsule() {
+      const today = new Date();
+      const openDate = new Date(today.getFullYear(), 11, 13); // December is 11 in JS
+
+      const messageEl = document.getElementById('capsuleMessage');
+      if (today >= openDate) {
+        messageEl.style.display = 'block';
+      } else {
+        alert("Not yet! The capsule will bloom on December 13 🌸");
+      }
+    }
+  </script>
+
+</body>
+</html>
