@@ -7,25 +7,43 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
 
-    body {
-      background-color: #fdf5e6; /* creamy beige */
-      font-family: 'Cute Font', cursive;
+    html, body {
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: #fdf5e6;
+      font-family: 'Cute Font', cursive;
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    canvas#petalCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
     }
 
     h1 {
       font-size: 2.5em;
       margin: 1.5em 0 0.5em;
       color: #de8aa1;
+      z-index: 1;
     }
 
     p {
       font-size: 1.2em;
       color: #555;
+      z-index: 1;
+    }
+
+    .garden, .character, .capsule, .center-heart {
+      z-index: 1;
     }
 
     .garden {
@@ -37,13 +55,13 @@
       width: 100%;
     }
 
-    .flower {
+    .flower, .character {
       cursor: pointer;
       position: relative;
       transition: transform 0.2s;
     }
 
-    .flower:hover {
+    .flower:hover, .character:hover {
       transform: scale(1.1);
     }
 
@@ -61,6 +79,7 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       display: none;
       white-space: nowrap;
+      z-index: 2;
     }
 
     .capsule {
@@ -93,41 +112,59 @@
       color: #de8aa1;
       font-size: 1.1em;
       display: none;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .center-heart {
+      margin: 30px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
+  <canvas id="petalCanvas"></canvas>
+
   <h1>🌸 Suemin's Love Garden 🌸</h1>
   <p>One flower each day, blooming just for you 💌</p>
 
+  <div class="center-heart">
+    <img src="heart-pixel.png" alt="Pixel Heart" width="80" />
+  </div>
+
   <div class="garden">
-    <!-- 🌷 Flower images go here -->
     <div class="flower" onclick="showPopup(this, 'I believe in you 💖')">
       <img src="flower1.png" alt="Flower 1" width="100" />
       <div class="popup">Meaning</div>
     </div>
-
     <div class="flower" onclick="showPopup(this, 'My heart grows only for you 🌿')">
       <img src="flower2.png" alt="Flower 2" width="100" />
       <div class="popup">Meaning</div>
     </div>
-
     <div class="flower" onclick="showPopup(this, 'You are my safe place 🌙')">
       <img src="flower3.png" alt="Flower 3" width="100" />
       <div class="popup">Meaning</div>
     </div>
-
-    <!-- 🌼 Add more flowers like this if needed -->
-    <!-- 
-    <div class="flower" onclick="showPopup(this, 'Your flower meaning here')">
-      <img src="your-flower.png" alt="Flower X" width="100" />
+    <div class="flower" onclick="showPopup(this, 'I love your smile 🌼')">
+      <img src="flower4.png" alt="Flower 4" width="100" />
       <div class="popup">Meaning</div>
     </div>
-    -->
   </div>
 
-  <!-- 💌 Love Capsule Section -->
+  <div class="character" onclick="showCharacterLine(this, frogLines)">
+    <img src="frog.png" alt="Frog Character" width="100" />
+    <div class="popup">Frog says...</div>
+  </div>
+
+  <div class="character" onclick="showCharacterLine(this, hyraxLines)">
+    <img src="hyrax.png" alt="Hyrax Character" width="100" />
+    <div class="popup">Hyrax says...</div>
+  </div>
+
   <div class="capsule">
     <h2>💌 Open the Love Capsule</h2>
     <p>Made for a very special day!</p>
@@ -136,19 +173,27 @@
   </div>
 
   <script>
-    function showPopup(flowerEl, message) {
-      const popup = flowerEl.querySelector('.popup');
+    function showPopup(el, message) {
+      const popup = el.querySelector('.popup');
       popup.textContent = message;
       popup.style.display = 'block';
+
+      const rect = popup.getBoundingClientRect();
+      if (rect.top < 0) {
+        popup.style.top = '40px';
+      } else {
+        popup.style.top = '-40px';
+      }
+
       setTimeout(() => {
         popup.style.display = 'none';
+        popup.style.top = '-40px';
       }, 3000);
     }
 
     function openCapsule() {
       const today = new Date();
-      const openDate = new Date(today.getFullYear(), 11, 13); // December is 11 in JS
-
+      const openDate = new Date(today.getFullYear(), 11, 13);
       const messageEl = document.getElementById('capsuleMessage');
       if (today >= openDate) {
         messageEl.style.display = 'block';
@@ -156,6 +201,89 @@
         alert("Not yet! The capsule will bloom on December 13 🌸");
       }
     }
+
+    const frogLines = [
+      "Insert frog line 1 here 🐸",
+      "Insert frog line 2 here 🐸",
+      "Insert frog line 3 here 🐸"
+    ];
+
+    const hyraxLines = [
+      "Insert hyrax line 1 here 🦔",
+      "Insert hyrax line 2 here 🦔",
+      "Insert hyrax line 3 here 🦔"
+    ];
+
+    function showCharacterLine(el, lines) {
+      const popup = el.querySelector('.popup');
+      const randomIndex = Math.floor(Math.random() * lines.length);
+      popup.textContent = lines[randomIndex];
+      popup.style.display = 'block';
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 3000);
+    }
+
+    // 🌸 Petal Background Animation
+    const canvas = document.getElementById('petalCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let petals = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Petal {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height;
+        this.size = 10 + Math.random() * 15;
+        this.speedY = 1 + Math.random() * 2;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = (Math.random() - 0.5) * 0.1;
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.angle += this.spin;
+        if (this.y > height) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = 'rgba(255,182,193,0.7)'; // light pink
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size * 0.6, this.size, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 40; i++) {
+      petals.push(new Petal());
+    }
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, width, height);
+      petals.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animatePetals);
+    }
+
+    animatePetals();
   </script>
 
 </body>
